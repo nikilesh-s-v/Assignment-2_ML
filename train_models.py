@@ -27,6 +27,7 @@ from sklearn.metrics import (
 )
 
 RANDOM_STATE = 42
+TEST_SIZE = 0.2
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_XLSX = os.path.join(HERE, "_drybean", "DryBeanDataset", "Dry_Bean_Dataset.xlsx")
 MODEL_DIR = os.path.join(HERE, "model")
@@ -92,7 +93,7 @@ def main():
 
     # Stratified split keeps the class balance in train and test.
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=RANDOM_STATE, stratify=y
+        X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=y
     )
 
     # Scale features - essential for KNN, SVM and Logistic Regression.
