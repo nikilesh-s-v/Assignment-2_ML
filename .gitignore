@@ -1,5 +1,9 @@
 # Raw dataset download / extraction (kept out of the repo; test_data.csv is committed instead)
-_drybean/
+# Exception: the source Excel file IS committed so the notebook can load the full dataset.
+_drybean/*
+!_drybean/DryBeanDataset/
+_drybean/DryBeanDataset/*
+!_drybean/DryBeanDataset/Dry_Bean_Dataset.xlsx
 _drybean.zip
 
 # Python
