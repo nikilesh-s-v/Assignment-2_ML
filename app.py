@@ -147,6 +147,7 @@ except Exception:
 # --------------------------------------------------------------------------- #
 st.subheader("3. Evaluation metrics")
 metrics = compute_metrics(y_true, y_pred, y_proba, n_classes)
+st.caption(f"Metrics for **{choice}** computed on {len(data)} uploaded test rows.")
 
 c1, c2, c3, c4, c5, c6 = st.columns(6)
 c1.metric("Accuracy", f"{metrics['Accuracy']:.4f}")
