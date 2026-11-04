@@ -107,6 +107,9 @@ python train_models.py        # (optional) regenerate the model/ artefacts
 streamlit run app.py          # launch the app, then upload test_data.csv
 ```
 
+> Note: `test_data.csv` already contains the held-out 20% test split (2,723 rows) with
+> the `Class` column, so you can upload it directly without running training first.
+
 ## Deploy on Streamlit Community Cloud
 
 1. Push this folder to a public GitHub repository.
