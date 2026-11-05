@@ -138,6 +138,7 @@ def main():
 
     winner = table["F1"].idxmax()
     print(f"\nBest model by macro F1: {winner} (F1 = {table.loc[winner, 'F1']:.4f})")
+    print(f"All artefacts saved to: {MODEL_DIR}")
 
 
 if __name__ == "__main__":
