@@ -194,3 +194,10 @@ with col_b:
     st.dataframe(pd.DataFrame(report).T.round(4), use_container_width=True)
 
 st.success(f"Evaluation complete for **{choice}** on {len(data)} uploaded rows.")
+
+# --------------------------------------------------------------------------- #
+# Footer
+# --------------------------------------------------------------------------- #
+st.divider()
+st.caption("Dry Bean Classifier - ML Assignment 2 | models are loaded from disk and "
+           "never retrained on uploaded data.")
