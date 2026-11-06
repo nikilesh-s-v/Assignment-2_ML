@@ -91,12 +91,13 @@ project/
 `https://assignment-2ml-nikilesh-2026aj05026.streamlit.app/`
 
 The app provides:
-- **CSV upload** of test data
+- **CSV upload** of test data, **or** a *Use bundled test_data.csv* option that scores the
+  repository's hold-out split with no upload (also downloadable from the sidebar)
 - **Model-selection dropdown** across the five classifiers
 - **Evaluation-metrics display** (Accuracy, AUC, Precision, Recall, F1, MCC)
 - **Confusion matrix + classification report**
 
-The app loads the saved models and the saved scaler, transforms the uploaded test data,
+The app loads the saved models and the saved scaler, transforms the selected test data,
 predicts, and reports metrics — it does **not** retrain on the uploaded data.
 
 ## How to Run Locally
