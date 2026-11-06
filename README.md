@@ -34,7 +34,7 @@ test data is transformed exactly as during training.
 
 ## c. GitHub Repository Link
 
-`https://github.com/<your-username>/dry-bean-classifier`   *(replace with your repo URL after pushing)*
+`https://github.com/nikilesh-s-v/Assignment-2_ML`
 
 ## d. Models Used
 
@@ -88,7 +88,7 @@ project/
 
 ## Live Streamlit App
 
-`https://<your-app-name>.streamlit.app`   *(replace with your deployed URL)*
+`https://assignment-2ml-nikilesh-2026aj05026.streamlit.app/`
 
 The app provides:
 - **CSV upload** of test data
