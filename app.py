@@ -26,8 +26,18 @@ from sklearn.metrics import (
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(HERE, "model")
+TEST_CSV = os.path.join(HERE, "test_data.csv")
 
 st.set_page_config(page_title="Dry Bean Classifier", page_icon="🫘", layout="wide")
+
+
+@st.cache_data
+def load_sample_bytes():
+    """Read the bundled test_data.csv as raw bytes (for the download button)."""
+    if os.path.exists(TEST_CSV):
+        with open(TEST_CSV, "rb") as fh:
+            return fh.read()
+    return None
 
 
 # --------------------------------------------------------------------------- #
@@ -98,21 +108,48 @@ with st.sidebar:
     st.write("**BITS ID:** 2026AJ05026")
     st.divider()
     st.caption("Upload a CSV containing the 16 feature columns and the `Class` "
-               "target column. A ready-made `test_data.csv` ships with the repo.")
+               "target column, or use the bundled `test_data.csv` below.")
+    _sample_bytes = load_sample_bytes()
+    if _sample_bytes is not None:
+        st.download_button(
+            "⬇️ Download test_data.csv",
+            data=_sample_bytes,
+            file_name="test_data.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
 
 # --------------------------------------------------------------------------- #
-# Feature (a): CSV upload
+# Feature (a): CSV upload (or use the bundled test_data.csv)
 # --------------------------------------------------------------------------- #
-st.subheader("1. Upload test data (CSV)")
-uploaded = st.file_uploader("Upload a CSV with the feature columns + target column",
-                            type=["csv"])
+st.subheader("1. Provide test data (CSV)")
+sample_available = os.path.exists(TEST_CSV)
 
-if uploaded is None:
-    st.info("Awaiting a CSV upload. You can use the `test_data.csv` file from the repository.")
+col_u, col_s = st.columns([3, 2])
+with col_u:
+    uploaded = st.file_uploader(
+        "Upload a CSV with the feature columns + target column", type=["csv"]
+    )
+with col_s:
+    st.write("")  # align with the uploader label
+    use_sample = st.checkbox(
+        "Use bundled test_data.csv",
+        value=False,
+        disabled=not sample_available,
+        help="Evaluate the hold-out test set that ships with the repository - no upload needed.",
+    )
+
+if use_sample and sample_available:
+    data = pd.read_csv(TEST_CSV)
+    st.caption("Using the bundled **test_data.csv** (repository hold-out split).")
+elif uploaded is not None:
+    data = pd.read_csv(uploaded)
+else:
+    st.info("Awaiting a CSV upload, or tick **Use bundled test_data.csv** to evaluate "
+            "the test set shipped with the repository.")
     st.stop()
 
-data = pd.read_csv(uploaded)
-st.write(f"Uploaded data: **{data.shape[0]} rows x {data.shape[1]} columns**")
+st.write(f"Test data: **{data.shape[0]} rows x {data.shape[1]} columns**")
 st.dataframe(data.head(), use_container_width=True)
 
 # Validate columns
@@ -147,7 +184,7 @@ except Exception:
 # --------------------------------------------------------------------------- #
 st.subheader("3. Evaluation metrics")
 metrics = compute_metrics(y_true, y_pred, y_proba, n_classes)
-st.caption(f"Metrics for **{choice}** computed on {len(data)} uploaded test rows.")
+st.caption(f"Metrics for **{choice}** computed on {len(data)} test rows.")
 
 c1, c2, c3, c4, c5, c6 = st.columns(6)
 c1.metric("Accuracy", f"{metrics['Accuracy']:.4f}")
@@ -193,7 +230,7 @@ with col_b:
     )
     st.dataframe(pd.DataFrame(report).T.round(4), use_container_width=True)
 
-st.success(f"Evaluation complete for **{choice}** on {len(data)} uploaded rows.")
+st.success(f"Evaluation complete for **{choice}** on {len(data)} test rows.")
 
 # --------------------------------------------------------------------------- #
 # Footer
