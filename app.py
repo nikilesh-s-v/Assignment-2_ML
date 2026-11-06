@@ -125,29 +125,28 @@ with st.sidebar:
 st.subheader("1. Provide test data (CSV)")
 sample_available = os.path.exists(TEST_CSV)
 
-col_u, col_s = st.columns([3, 2])
-with col_u:
+source = st.radio(
+    "Select the test data to evaluate:",
+    options=["Bundled test_data.csv", "Upload my own CSV"],
+    index=0 if sample_available else 1,
+    horizontal=True,
+)
+
+if source == "Bundled test_data.csv":
+    if not sample_available:
+        st.warning("The bundled test_data.csv is not available; please upload a CSV instead.")
+        st.stop()
+    data = pd.read_csv(TEST_CSV)
+    st.caption("Using the bundled **test_data.csv** (repository hold-out split).")
+else:
     uploaded = st.file_uploader(
         "Upload a CSV with the feature columns + target column", type=["csv"]
     )
-with col_s:
-    st.write("")  # align with the uploader label
-    use_sample = st.checkbox(
-        "Use bundled test_data.csv",
-        value=False,
-        disabled=not sample_available,
-        help="Evaluate the hold-out test set that ships with the repository - no upload needed.",
-    )
-
-if use_sample and sample_available:
-    data = pd.read_csv(TEST_CSV)
-    st.caption("Using the bundled **test_data.csv** (repository hold-out split).")
-elif uploaded is not None:
+    if uploaded is None:
+        st.info("Awaiting a CSV upload. The CSV needs the 16 feature columns and the "
+                "`Class` target column.")
+        st.stop()
     data = pd.read_csv(uploaded)
-else:
-    st.info("Awaiting a CSV upload, or tick **Use bundled test_data.csv** to evaluate "
-            "the test set shipped with the repository.")
-    st.stop()
 
 st.write(f"Test data: **{data.shape[0]} rows x {data.shape[1]} columns**")
 st.dataframe(data.head(), use_container_width=True)
